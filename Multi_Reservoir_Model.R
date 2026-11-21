@@ -1,5 +1,5 @@
 #Lepto_Model_Simulation_LAXMAN2026
-
+rm(list = ls())
 # Date: 16/11/2026
 # ctrl shift R for sections
 
