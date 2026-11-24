@@ -30,14 +30,18 @@ Tmin <- 7.1 #celcius - antima26ref
 Tmax <- 34 # celcius - antima26ref
 T <- 
 beta <- 0.3458 #antima26ref
+beta2 <- 1.46*10^-6
+kappa <- 10000
 
 ## Parameter list
 parameters <- c(lambda1 = lambda1,
                 lambda2 = lambda2,
                 c1 = c1,
                 c2 = c2,
+                beta2 = beta2,
                 h1 = h1,
                 h2 = h2,
+                kappa = kappa,
                 da = da,
                 dh = dh,
                 dL1 = dL1,
@@ -64,9 +68,10 @@ LeptoModelAntimaw_Enviro<-function(t, state, parameters) {
   with(as.list(c(state, parameters)),{
     
     # force of infection - cant fit in params bcs of time depend. var. 
+    En = ((Bl*beta2)/(kappa + Bl))
     Td = alpha*(T - Tmin)*(1 - exp(beta*(T-Tmax)))
-    lambdah = c2*Td*(Sh/(Sh+h2))*Ih
-    lambdaa = c1*Td*(Sa/(Sa+h1))*Ia
+    lambdah = c2*Td*(Sh/(Sh+h2))*Ia + En
+    lambdaa = c1*Td*(Sa/(Sa+h1))*Ia + En
     
     # rate of change equns
     dSh = lambda2 - lambdah - dh*Sh + rH*Ih
@@ -93,7 +98,7 @@ df <- as.data.frame(out)
 
 ## Plotting Time - png ####
 
-png("LeptoModelAntimaw_Enviro.png", width = 1600, height = 1200, res = 150)
+png("LeptoModelAntimaw_Enviro.png3", width = 1600, height = 1200, res = 150)
 
 par(oma = c(0, 0, 2, 0))
 plot(out, xlab = "time", ylab = "-")
@@ -113,7 +118,7 @@ df$Nh <- df$Sh + df$Ih
 df$N <- df$Na + df$Nh
 
 
-png("LeptoModelAntimaw_Enviro_simulations.png", width = 1600, height = 1200, res = 160)
+png("LeptoModelAntimaw_Enviro_simulations3.png", width = 1600, height = 1200, res = 160)
 
 # replicate the papers plots via overlapping variables againt time 
 LeptoModelAntimaw_Enviro_plot <- function(vars, colrs, lty = 1, main, ylab = "Population", lwd = 2)
