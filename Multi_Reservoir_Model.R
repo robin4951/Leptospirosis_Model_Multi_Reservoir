@@ -11,24 +11,25 @@ library(deSolve)
 ## Model Parameters ####
 
 # Parameter Equation Components 
-lambda1 <- 
-lambda2 <- 
-c1 <- 
-c2 <- 
-h1 <- 
-h2 <- 
-da <- 
-dh <-  
-dL1 <- 
-dL2 <- 
-rH <- 
+lambda1 <- 20000
+lambda2 <- 500
+c1 <- 0.03016
+c2 <- 0.00028
+h1 <- 10000
+h2 <- 2500000
+da <- 0.1071
+dh <-  0.0012895
+dL1 <- 0.15
+dL2 <- 0.04
+rH <- 0.4046
 tau1 <- 0.06
 tau2 <- 0.2
 mub <- 0.05
-alpha <- 
-Tmin <-
-Tmax <-
+alpha <- 3.3940
+Tmin <- 7.1 #celcius - antima26ref
+Tmax <- 34 # celcius - antima26ref
 T <- 
+beta <- 0.3458 #antima26ref
 
 ## Parameter list
 parameters <- c(lambda1 = lambda1,
@@ -48,14 +49,15 @@ parameters <- c(lambda1 = lambda1,
                 alpha = alpha,
                 Tmin = Tmin,
                 Tmax = Tmax,
-                T = T)
+                T = T,
+                beta = beta)
 
 ## Model Variables + Initial Conditions  ####
-state <- c(Sh = 5000000,
-           Ih = 10,
-           Sa = 19000,
+state <- c(Sh = 10000,
+           Ih = 1,
+           Sa = 15000,
            Ia = 1000,
-           Bl = 1000)
+           Bl = 100)
 
 ## Model Equations ####
 LeptoModelAntimaw_Enviro<-function(t, state, parameters) {
