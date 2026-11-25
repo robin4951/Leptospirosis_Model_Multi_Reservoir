@@ -28,7 +28,7 @@ mub <- 0.05
 alpha <- 3.3940
 Tmin <- 7.1 #celcius - antima26ref
 Tmax <- 34 # celcius - antima26ref
-T <- 
+T <- 27
 beta <- 0.3458 #antima26ref
 beta2 <- 1.46*10^-6
 kappa <- 10000
@@ -57,7 +57,7 @@ parameters <- c(lambda1 = lambda1,
                 beta = beta)
 
 ## Model Variables + Initial Conditions  ####
-state <- c(Sh = 10000,
+state <- c(Sh = 50000000,
            Ih = 1,
            Sa = 15000,
            Ia = 1000,
@@ -98,7 +98,7 @@ df <- as.data.frame(out)
 
 ## Plotting Time - png ####
 
-png("LeptoModelAntimaw_Enviro.png3", width = 1600, height = 1200, res = 150)
+png("LeptoModelAntimaw_Enviro.png5", width = 1600, height = 1200, res = 150)
 
 par(oma = c(0, 0, 2, 0))
 plot(out, xlab = "time", ylab = "-")
@@ -118,7 +118,7 @@ df$Nh <- df$Sh + df$Ih
 df$N <- df$Na + df$Nh
 
 
-png("LeptoModelAntimaw_Enviro_simulations3.png", width = 1600, height = 1200, res = 160)
+png("LeptoModelAntimaw_Enviro_simulations5.png", width = 1600, height = 1200, res = 160)
 
 # replicate the papers plots via overlapping variables againt time 
 LeptoModelAntimaw_Enviro_plot <- function(vars, colrs, lty = 1, main, ylab = "Population", lwd = 2)
