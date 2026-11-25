@@ -58,7 +58,7 @@ parameters <- c(lambda1 = lambda1,
 
 ## Model Variables + Initial Conditions  ####
 state <- c(Sh = 50000000,
-           Ih = 1,
+           Ih = 100,
            Sa = 15000,
            Ia = 1000,
            Bl = 100)
