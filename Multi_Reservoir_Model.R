@@ -1,4 +1,4 @@
-#Lepto_Model_Simulation_LAXMAN2026
+#Lepto_Model_Simulation
 rm(list = ls())
 # Date: 16/11/2026
 # ctrl shift R for sections
@@ -11,27 +11,29 @@ library(deSolve)
 ## Model Parameters ####
 
 # Parameter Equation Components 
-lambda1 <- 20000
-lambda2 <- 500
+lambda1 <- 140.8  #laxman
+lambda2 <- 37013.84   #laxman
 c1 <- 0.03016
 c2 <- 0.00028
 h1 <- 10000
 h2 <- 2500000
-da <- 0.1071
+da <- 0.00704 #laxman
 dh <-  0.0012895
 dL1 <- 0.15
 dL2 <- 0.04
 rH <- 0.4046
-tau1 <- 0.06
+tau1 <- 0.001 #laxman
 tau2 <- 0.2
 mub <- 0.05
 alpha <- 3.3940
 Tmin <- 7.1 #celcius - antima26ref
 Tmax <- 34 # celcius - antima26ref
-T <- 27
+Temp <- 27
 beta <- 0.3458 #antima26ref
-beta2 <- 1.46*10^-6
-kappa <- 10000
+beta2 <- 1.46*10^-6    #6
+kappa <- 10*10^6 #lara #10000
+delta <- 5
+xi <-500
 
 ## Parameter list
 parameters <- c(lambda1 = lambda1,
@@ -53,8 +55,10 @@ parameters <- c(lambda1 = lambda1,
                 alpha = alpha,
                 Tmin = Tmin,
                 Tmax = Tmax,
-                T = T,
-                beta = beta)
+                Temp = Temp,
+                beta = beta,
+                xi = xi,
+                delta = delta)
 
 ## Model Variables + Initial Conditions  ####
 state <- c(Sh = 50000000,
@@ -69,15 +73,15 @@ LeptoModelAntimaw_Enviro<-function(t, state, parameters) {
     
     # force of infection - cant fit in params bcs of time depend. var. 
     En = ((Bl*beta2)/(kappa + Bl))
-    Td = alpha*(T - Tmin)*(1 - exp(beta*(T-Tmax)))
-    lambdah = c2*Td*(Sh/(Sh+h2))*Ia + En
-    lambdaa = c1*Td*(Sa/(Sa+h1))*Ia + En
+    Td = alpha*(Temp - Tmin)*(1 - exp(beta*(Temp-Tmax)))
+    lambdah = (c2)*Td*(Sh/(Sh+h2))*Ia 
+    lambdaa = (c1)*Td*(Sa/(Sa+h1))*Ia 
     
     # rate of change equns
-    dSh = lambda2 - lambdah - dh*Sh + rH*Ih
-    dIh = lambdah - da*Ih - dL2*Ih - rH*Ih
-    dSa = lambda1 - lambdaa - da*Sa 
-    dIa = lambdaa - da*Ia - dL1*Ia
+    dSh = lambda2 - lambdah - delta*En - dh*Sh + rH*Ih
+    dIh = lambdah + delta*En - dh*Ih - dL2*Ih - rH*Ih
+    dSa = lambda1 - lambdaa - xi*En - da*Sa 
+    dIa = lambdaa + xi*En - da*Ia - dL1*Ia
     dBl = tau1*Ih + tau2*Ia - mub*Bl
     
     list(c(dSh, dIh, dSa, dIa, dBl)) # rate of change
@@ -86,7 +90,7 @@ LeptoModelAntimaw_Enviro<-function(t, state, parameters) {
 
 
 ## Model Application - TimeScale ####
-times <- seq(0, 300, by = 0.01)
+times <- seq(0, 100, by = 0.01)
 
 
 ## Model Integration ####
@@ -98,7 +102,7 @@ df <- as.data.frame(out)
 
 ## Plotting Time - png ####
 
-png("LeptoModelAntimaw_Enviro.png6", width = 1600, height = 1200, res = 150)
+png("LeptoModelAntimaw_Enviro.png11", width = 1600, height = 1200, res = 150)
 
 par(oma = c(0, 0, 2, 0))
 plot(out, xlab = "time", ylab = "-")
@@ -118,7 +122,7 @@ df$Nh <- df$Sh + df$Ih
 df$N <- df$Na + df$Nh
 
 
-png("LeptoModelAntimaw_Enviro_simulations6.png", width = 1600, height = 1200, res = 160)
+png("MultiReservoir_T_27C.png", width = 1600, height = 1200, res = 160)
 
 # replicate the papers plots via overlapping variables againt time 
 LeptoModelAntimaw_Enviro_plot <- function(vars, colrs, lty = 1, main, ylab = "Population", lwd = 2)
@@ -130,8 +134,8 @@ par(mfrow = c(2,2), oma = c(0, 0, 3, 0), mar = c(4, 4, 3, 1))
 
 
 ## plot 1 -humans 
-LeptoModelAntimaw_Enviro_plot(vars = c("Sh", "Ih", "Nh"),
-                       colrs = c("steelblue", "navy", "blue"),
+LeptoModelAntimaw_Enviro_plot(vars = c("Ih"),
+                       colrs = c("navy"),
                        main = "Human Transmission")
 
 ## plot 2 - human exposed, infected, recovered 
@@ -149,7 +153,7 @@ LeptoModelAntimaw_Enviro_plot(vars = c("N", "Na", "Nh"),
                        colrs = c("green4", "red", "blue"),
                        main = "Populations")
 
-mtext("LeptoModelAntimaw_Enviro_plot", 
+mtext("Multi Reservoir, Temp 27C", 
       outer = TRUE, side = 3, cex = 1.4)
 
 dev.off()
