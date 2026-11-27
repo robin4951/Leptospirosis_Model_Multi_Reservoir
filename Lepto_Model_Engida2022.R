@@ -74,8 +74,9 @@ state <- c(Shh = 5000000,
            Bl = 100)
 
 ## Model Equations ####
-LeptoModLaxman<-function(t, state, parameters) {
-  with(as.list(c(state, parameters)),{
+LeptoModLaxman<-function(t, state, parameters) 
+  {with(as.list(c(state, parameters)),
+        {
     
     # force of infection - cant fit in params bcs of time depend. var. 
     lambda1 = beta1*Ia + ((beta4*Bl)/(kappa + Bl))

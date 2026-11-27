@@ -18,7 +18,7 @@ r <- 0.5351
 rho <- 0.3
 muh <- 0.001108
 mua <- 0.00704
-#beta1 <- 3.1*10^-7 # bifurcation parameter
+beta1 <- 3.1*10^-7 # bifurcation parameter
 zeta <- 1.3
 alpha <- 0.2
 gamma <- 0.623
@@ -34,7 +34,7 @@ beta3 <- 3.85*10^-6
 parameters <- c(Lambdah = Lambdah,
                 Lambdaa = Lambdaa,
                 delta = delta,
-                #beta1 = beta1,
+                beta1 = beta1,
                 beta2 = beta2,
                 beta3 = beta3,
                 gamma = gamma,
